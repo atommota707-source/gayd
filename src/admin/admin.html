@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CYBERSHOP // Admin Panel</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div id="admin-app">
+    <div id="login-view">
+      <div class="login-card">
+        <div class="login-header">
+          <span class="brand-mark">CS</span>
+          <h1>CYBERSHOP <small>ADMIN PANEL</small></h1>
+        </div>
+        <form id="login-form">
+          <div class="form-group">
+            <label>LOGIN</label>
+            <input type="text" id="login-username" required autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label>PASSWORD</label>
+            <input type="password" id="login-password" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">ENTER</button>
+          <div id="login-error" class="error-msg" hidden></div>
+        </form>
+      </div>
+    </div>
+
+    <div id="dashboard-view" hidden>
+      <nav class="admin-sidebar">
+        <div class="sidebar-brand">
+          <span class="brand-mark">CS</span>
+          <span>ADMIN</span>
+        </div>
+        <ul class="sidebar-nav">
+          <li><button class="nav-btn active" data-view="stats">Dashboard</button></li>
+          <li><button class="nav-btn" data-view="guides">Guides</button></li>
+          <li><button class="nav-btn" data-view="cloud">Cloud Storage</button></li>
+          <li><button class="nav-btn" data-view="labels">UI Labels</button></li>
+          <li><button class="nav-btn" data-view="translations">Translations</button></li>
+        </ul>
+        <button id="logout-btn" class="btn btn-secondary sidebar-logout">Logout</button>
+      </nav>
+
+      <main class="admin-main">
+        <header class="admin-header">
+          <h2 id="view-title">Dashboard</h2>
+        </header>
+
+        <section id="stats-view" class="admin-content">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-value" id="stat-today-views">0</div>
+              <div class="stat-label">Views Today</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="stat-total-views">0</div>
+              <div class="stat-label">Total Views</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="stat-total-guides">0</div>
+              <div class="stat-label">Published Guides</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="stat-cipher-success">0</div>
+              <div class="stat-label">Cipher Successes</div>
+            </div>
+          </div>
+          <div class="top-guides">
+            <h3>Top Guides</h3>
+            <div id="top-guides-list"></div>
+          </div>
+        </section>
+
+        <section id="guides-view" class="admin-content" hidden>
+          <div class="toolbar">
+            <button id="create-guide-btn" class="btn btn-primary">+ New Guide</button>
+          </div>
+          <div id="guides-list" class="items-list"></div>
+          <div id="guide-editor" class="editor-panel" hidden>
+            <div class="editor-header">
+              <h3 id="editor-title">New Guide</h3>
+              <button id="close-editor-btn" class="btn btn-secondary">Close</button>
+            </div>
+            <form id="guide-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Guide ID (slug)</label>
+                  <input type="text" id="guide-slug" required>
+                </div>
+                <div class="form-group">
+                  <label>Category</label>
+                  <input type="text" id="guide-category" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Title (RU)</label>
+                  <input type="text" id="guide-title-ru" required>
+                </div>
+                <div class="form-group">
+                  <label>Title (EN)</label>
+                  <input type="text" id="guide-title-en">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group full-width">
+                  <label>Description (RU)</label>
+                  <textarea id="guide-desc-ru" rows="3"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Cipher Code</label>
+                <div class="cipher-row">
+                  <input type="text" id="guide-cipher" readonly>
+                  <button type="button" id="regenerate-cipher-btn" class="btn btn-secondary">Regenerate</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Sections</label>
+                <div id="sections-editor"></div>
+                <button type="button" id="add-section-btn" class="btn btn-secondary">+ Add Section</button>
+              </div>
+              <div class="form-group">
+                <label>Images</label>
+                <div id="image-upload-zone" class="upload-zone">
+                  <input type="file" id="image-input" accept="image/*" hidden>
+                  <p>Drag & drop images here or click to browse</p>
+                </div>
+                <div id="guide-images" class="images-grid"></div>
+              </div>
+              <div class="form-actions">
+                <button type="button" id="translate-guide-btn" class="btn btn-secondary">Translate All</button>
+                <button type="button" id="publish-guide-btn" class="btn btn-secondary">Publish</button>
+                <button type="submit" class="btn btn-primary">Save Guide</button>
+                <button type="button" id="delete-guide-btn" class="btn btn-danger">Delete</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section id="cloud-view" class="admin-content" hidden>
+          <div class="upload-zone" id="cloud-upload-zone">
+            <input type="file" id="cloud-input" hidden>
+            <p>Drag & drop files here for cloud storage</p>
+          </div>
+          <div id="cloud-files" class="items-list"></div>
+        </section>
+
+        <section id="labels-view" class="admin-content" hidden>
+          <div id="labels-list" class="items-list"></div>
+        </section>
+
+        <section id="translations-view" class="admin-content" hidden>
+          <p>Translations are automatically cached when you translate guides.</p>
+          <div id="translations-list" class="items-list"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="api.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

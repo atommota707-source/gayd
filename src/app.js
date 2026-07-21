@@ -1,1 +1,277 @@
-(()=>{'use strict';const TEST='vHtqhqY8p0TmcY3CQbA94D63OZarguy73o54uZ',q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)],root=document.documentElement;const copy={ru:{style:'СТИЛЬ',hints:'ПОДСКАЗКИ',online:'СИСТЕМА В СЕТИ',guides:'Гайды',subtitle:'Закрытая база игровых протоколов. Доступ защищён персональным шифром.',cipher:'СЕКРЕТНЫЙ ШИФР',open:'Открыть гайд',format:'Формат шифра',test:'Тестовый доступ',how:'Как открыть',protocol:'активный протокол',chapters:'практических разделов',styles:'уникальных дизайна',locked:'Гайд заблокирован',lockedText:'Введите точный шифр, чтобы открыть материал.',howTitle:'Как открыть гайд',step1:'Получите шифр CYBERSHOP.',step2:'Вставьте код без пробелов.',step3:'Нажмите «Открыть гайд».',insert:'Вставить тестовый шифр',light:'Светлая',dark:'Тёмная',access:'Доступ разрешён',bad:'Неверный шифр',retry:'Попробовать снова',start:'Начало',safety:'Безопасность',intro:'Введение',algorithm:'Алгоритм',advanced:'Техники',quick:'Краткий гайд',bonus:'БОНУС',quickTitle:'Краткий гайд: всё необходимое',quickSub:'Сжатая практическая версия',guideTitle:'League of Legends: лучшие места для вардов',category:'League of Legends',fullTitle:'Лучшие места для вардов на всех стадиях игры'},en:{style:'STYLE',hints:'HINTS',online:'SYSTEM ONLINE',guides:'Guides',subtitle:'A private archive of gaming protocols protected by a personal cipher.',cipher:'SECRET CIPHER',open:'Unlock guide',format:'Cipher format',test:'Test access',how:'How to unlock',protocol:'active protocol',chapters:'practical chapters',styles:'unique designs',locked:'Guide locked',lockedText:'Enter the exact cipher to open the material.',howTitle:'How to unlock a guide',step1:'Get a CYBERSHOP cipher.',step2:'Paste the code without spaces.',step3:'Press “Unlock guide”.',insert:'Insert test cipher',light:'Light',dark:'Dark',access:'Access granted',bad:'Invalid cipher',retry:'Try again',start:'Start',safety:'Safety',intro:'Introduction',algorithm:'Algorithm',advanced:'Advanced',quick:'Quick guide',bonus:'BONUS',quickTitle:'Quick guide: everything essential',quickSub:'Condensed practical edition',guideTitle:'League of Legends: best ward locations',category:'League of Legends',fullTitle:'Best ward locations for every game stage'}};let lang=localStorage.getItem('csLang')==='en'?'en':'ru',unlocked=false;const t=k=>copy[lang][k]||k;function toast(s){const e=q('#toast');e.textContent=s;e.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>e.classList.remove('show'),1500)}function syncTheme(){const light=root.dataset.theme==='light';q('#themeIcon').textContent=light?'☾':'☀';q('#themeLabel').textContent=light?t('dark'):t('light');document.querySelector('meta[name=theme-color]').content=light?'#eef4f8':'#050713'}function applyLanguage(next,notify=true){lang=next;root.lang=lang;localStorage.setItem('csLang',lang);qa('[data-i18n]').forEach(e=>{if(copy[lang][e.dataset.i18n])e.textContent=t(e.dataset.i18n)});q('#langLabel').textContent=lang.toUpperCase();q('#cipherInput').placeholder=lang==='ru'?'Введите код доступа…':'Enter access code…';syncTheme();typeLine();if(unlocked)renderGuide();document.dispatchEvent(new CustomEvent('cs:language',{detail:{lang}}));if(notify)toast(lang==='ru'?'Русский язык включён':'English enabled')}function typeLine(){const e=q('#typingLine'),s=lang==='ru'?'// ИНИЦИАЛИЗАЦИЯ УЗЛА…':'// INITIALIZING NODE…';clearInterval(window.__typing);let i=0;e.textContent='';window.__typing=setInterval(()=>{e.textContent=s.slice(0,++i);if(i>=s.length)clearInterval(window.__typing)},45)}q('#langBtn').onclick=()=>applyLanguage(lang==='ru'?'en':'ru');q('#themeBtn').onclick=()=>{const next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;localStorage.setItem('csTheme',next);syncTheme();toast(next==='light'?(lang==='ru'?'Светлая тема':'Light theme'):(lang==='ru'?'Тёмная тема':'Dark theme'))};root.dataset.theme=localStorage.getItem('csTheme')==='light'?'light':'dark';function openModal(){q('#hintModal').hidden=false}function closeModal(){q('#hintModal').hidden=true}q('#hintsBtn').onclick=openModal;qa('[data-close]').forEach(e=>e.onclick=closeModal);q('#fillTest').onclick=()=>{q('#cipherInput').value=TEST;closeModal();q('#cipherInput').focus();toast(lang==='ru'?'Шифр вставлен':'Cipher inserted')};qa('.hintChip').forEach(b=>b.onclick=()=>{if(b.dataset.hint==='test')q('#fillTest').click();else openModal()});const quickRu=[['Главный принцип','Вард нужен для решения, а не для статистики. Определи угрозу и действие команды заранее.'],['Ранняя игра','Контролируй реку, трибуш и вход в лес только после безопасного пуша волны.'],['Мидгейм','Переноси обзор на перекрёстки, маршруты к объектам и входы во вражеский лес.'],['Драконы и Барон','Начинай подготовку за 60–90 секунд: линии, совместный вход, удаление обзора, фланги.'],['Безопасность','Не входи в тёмную зону один. Используй дальние способности, растения и синюю безделушку.'],['Роли','Поддержка строит сеть, лесник помогает на объектах, соло-линии закрывают фланги.'],['Удаление обзора','Красную линзу включай до входа. Не рискуй жизнью ради одного тотема.'],['Тайминги','Синхронизируй возвращение, покупку контрольных тотемов и движение команды.'],['Ошибки','Не дублируй обзор в соседних кустах и не ставь глубокие варды без приоритета.'],['Чек-лист','Объект, приоритет линий, видимые враги, путь отхода — проверь все четыре пункта.']];const quickEn=[['Core principle','A ward exists to enable a decision. Name the threat and your team response first.'],['Early game','Cover river, tri-brush and jungle entrances only after creating a safe wave state.'],['Mid game','Move vision to intersections, objective routes and enemy jungle entrances.'],['Dragon and Baron','Set up 60–90 seconds early: lanes, grouped entry, vision denial and flank coverage.'],['Safety','Never enter darkness alone. Use ranged spells, plants and blue trinkets.'],['Team roles','Support builds the network, jungle helps objectives, solo lanes cover flanks.'],['Vision denial','Activate sweeper before entry. Never trade your life for one ward.'],['Timings','Synchronize recalls, control wards and team movement.'],['Mistakes','Do not duplicate nearby vision or ward deep without lane priority.'],['Checklist','Objective, lane priority, visible enemies, escape route — check all four.']];const fullRu=[['intro','Введение','Качественный обзор превращает неизвестность в план. Каждая точка должна показывать маршрут, который влияет на следующее решение команды.'],['algorithm','Алгоритм действий','Определи следующий объект, вытолкни ближайшую линию, собери команду и только затем заходи в тёмную область. Ставь обзор слоями от безопасной территории к реке.'],['advanced','Продвинутые техники','Используй ложные маршруты, выключенные линзой тотемы и глубокий обзор после появления соперников на другой стороне карты.'],['safety','Безопасность','Считай видимых противников и сохраняй путь отхода. Если информации недостаточно, синяя безделушка ценнее рискованной проверки лицом.'],['timing','Тайминги объектов','Обновляй обзор перед появлением объекта, а не после. Слишком ранний тотем исчезнет, слишком поздний заставит команду рисковать.'],['summary','Системный итог','Хороший обзор — это своевременная информация, безопасная установка и заранее подготовленное решение.']];const fullEn=[['intro','Introduction','Strong vision turns uncertainty into a plan. Every ward should reveal a route that changes the next team decision.'],['algorithm','Action algorithm','Identify the next objective, push the nearest lane, group, and only then enter darkness. Build vision in layers from safe territory toward river.'],['advanced','Advanced techniques','Use deceptive routes, wards disabled by sweeper and deep vision after opponents show on the far side.'],['safety','Safety','Count visible opponents and preserve an escape route. When information is missing, blue trinket beats a blind face-check.'],['timing','Objective timings','Refresh vision before an objective spawns. Too early expires; too late forces dangerous checks.'],['summary','System summary','Good vision combines timely information, safe placement and a decision prepared in advance.']];function renderGuide(){const quick=lang==='ru'?quickRu:quickEn,full=lang==='ru'?fullRu:fullEn;q('#contentPanel').innerHTML=`<article class="guide"><header class="guideTop"><span class="shield">◆</span><div><p>${t('category')}</p><h2>${t('guideTitle')}</h2></div></header><nav class="guideNav" aria-label="Guide navigation"><button data-target="guide-start">${t('start')}</button><button data-target="safety">${t('safety')}</button><button data-target="intro">${t('intro')}</button><button data-target="algorithm">${t('algorithm')}</button><button data-target="advanced">${t('advanced')}</button><button class="quickButton" data-target="quick-guide">${t('quick')}</button><button class="bonusNavButton" data-target="cybershop-bonus">${t('bonus')}</button></nav><section id="quick-guide" class="quickGuide"><div class="quickHead"><p>QUICK PROTOCOL</p><h3>${t('quickTitle')}</h3><span>${t('quickSub')}</span></div><div class="quickGrid">${quick.map((x,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><h4>${x[0]}</h4><p>${x[1]}</p></article>`).join('')}</div></section><h2 class="guideMegaTitle" id="guide-start">${t('fullTitle')}</h2>${full.map(x=>`<section class="guideSection" id="${x[0]}"><h3>${x[1]}</h3><p>${x[2]}</p></section>`).join('')}<div class="megaAd"></div></article>`;document.dispatchEvent(new CustomEvent('cs:guide-rendered'));q('#contentPanel').scrollIntoView({behavior:'smooth',block:'start'})}function unlock(){const button=q('#unlockBtn');button.disabled=true;button.classList.add('loading');setTimeout(()=>{button.disabled=false;button.classList.remove('loading');if(q('#cipherInput').value.trim()===TEST){unlocked=true;renderGuide();toast(t('access'))}else{q('#contentPanel').innerHTML=`<div class="locked errorState"><div class="lockVisual"><span>×</span><i></i><i></i></div><p class="kicker">ACCESS DENIED</p><h2>${t('bad')}</h2><button class="retry">${t('retry')}</button></div>`;q('.retry').onclick=()=>q('#cipherInput').focus();toast(t('bad'))}},280)}q('#unlockBtn').onclick=unlock;q('#cipherInput').onkeydown=e=>{if(e.key==='Enter')unlock()};q('#contentPanel').addEventListener('click',e=>{const b=e.target.closest('[data-target]');if(!b)return;const target=document.getElementById(b.dataset.target);if(target)target.scrollIntoView({behavior:'smooth',block:'start'})});q('#guideCount').textContent='1';applyLanguage(lang,false);syncTheme();window.CS_APP={setLanguage:applyLanguage,getLanguage:()=>lang,renderGuide:()=>unlocked&&renderGuide(),testCode:TEST};})();
+(() => {
+  'use strict';
+  
+  const q = s => document.querySelector(s);
+  const qa = s => [...document.querySelectorAll(s)];
+  const root = document.documentElement;
+  
+  let lang = localStorage.getItem('csLang') === 'en' ? 'en' : 'ru';
+  let unlocked = false;
+  let currentGuide = null;
+  let guidesCache = {};
+  
+  const copy = {
+    ru: {
+      style: 'СТИЛЬ', hints: 'ПОДСКАЗКИ', online: 'СИСТЕМА В СЕТИ', guides: 'Гайды',
+      subtitle: 'Закрытая база игровых протоколов. Доступ защищён персональным шифром.',
+      cipher: 'СЕКРЕТНЫЙ ШИФР', open: 'Открыть гайд', format: 'Формат шифра',
+      test: 'Тестовый доступ', how: 'Как открыть', protocol: 'активный протокол',
+      chapters: 'практических разделов', styles: 'уникальных дизайна',
+      locked: 'Гайд заблокирован', lockedText: 'Введите точный шифр, чтобы открыть материал.',
+      howTitle: 'Как открыть гайд', step1: 'Получите шифр CYBERSHOP.',
+      step2: 'Вставьте код без пробелов.', step3: 'Нажмите «Открыть гайд».',
+      insert: 'Вставить тестовый шифр', light: 'Светлая', dark: 'Тёмная',
+      access: 'Доступ разрешён', bad: 'Неверный шифр', retry: 'Попробовать снова',
+      start: 'Начало', safety: 'Безопасность', intro: 'Введение', algorithm: 'Алгоритм',
+      advanced: 'Техники', quick: 'Краткий гайд', bonus: 'БОНУС',
+      quickTitle: 'Краткий гайд: всё необходимое', quickSub: 'Сжатая практическая версия'
+    },
+    en: {
+      style: 'STYLE', hints: 'HINTS', online: 'SYSTEM ONLINE', guides: 'Guides',
+      subtitle: 'A private archive of gaming protocols protected by a personal cipher.',
+      cipher: 'SECRET CIPHER', open: 'Unlock guide', format: 'Cipher format',
+      test: 'Test access', how: 'How to unlock', protocol: 'active protocol',
+      chapters: 'practical chapters', styles: 'unique designs',
+      locked: 'Guide locked', lockedText: 'Enter the exact cipher to open the material.',
+      howTitle: 'How to unlock a guide', step1: 'Get a CYBERSHOP cipher.',
+      step2: 'Paste the code without spaces.', step3: 'Press "Unlock guide".',
+      insert: 'Insert test cipher', light: 'Light', dark: 'Dark',
+      access: 'Access granted', bad: 'Invalid cipher', retry: 'Try again',
+      start: 'Start', safety: 'Safety', intro: 'Introduction', algorithm: 'Algorithm',
+      advanced: 'Advanced', quick: 'Quick Guide', bonus: 'BONUS',
+      quickTitle: 'Quick guide: everything you need', quickSub: 'Compressed practical version'
+    }
+  };
+  
+  function t(key) { return copy[lang][key] || key; }
+  
+  async function loadGuidesFromAPI() {
+    try {
+      const res = await fetch('/api/guides/public');
+      const guides = await res.json();
+      guidesCache = {};
+      guides.forEach(g => {
+        guidesCache[g.guide_id] = g;
+      });
+      return guides;
+    } catch (err) {
+      console.error('Failed to load guides from API:', err);
+      return [];
+    }
+  }
+  
+  async function verifyCipherViaAPI(guideId, cipher) {
+    try {
+      const res = await fetch('/api/guides/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guide_id: guideId, cipher })
+      });
+      if (res.ok) {
+        return await res.json();
+      }
+      return null;
+    } catch (err) {
+      console.error('Cipher verification failed:', err);
+      return null;
+    }
+  }
+  
+  function trackPageView(guideId) {
+    fetch('/api/analytics/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event_type: 'page_view', guide_id: guideId })
+    }).catch(() => {});
+  }
+  
+  function applyLanguage(next, notify = true) {
+    lang = next;
+    root.lang = next;
+    localStorage.setItem('csLang', next);
+    
+    qa('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (copy[lang][key]) el.textContent = copy[lang][key];
+    });
+    
+    q('#langLabel').textContent = lang === 'ru' ? 'RU' : 'EN';
+    q('#cipherInput').placeholder = lang === 'ru' ? 'Вставьте шифр сюда...' : 'Paste cipher here...';
+    
+    if (unlocked && currentGuide) {
+      renderGuide(currentGuide);
+    }
+    
+    document.dispatchEvent(new CustomEvent('cs:language', { detail: { lang } }));
+    
+    if (notify) {
+      toast(lang === 'ru' ? 'Язык: Русский' : 'Language: English');
+    }
+  }
+  
+  function syncTheme() {
+    const isLight = root.dataset.theme === 'light';
+    q('#themeIcon').textContent = isLight ? '☀' : '☾';
+    q('#themeLabel').textContent = isLight ? t('light') : t('dark');
+    document.querySelector('meta[name="theme-color"]').content = isLight ? '#eef4f8' : '#050713';
+  }
+  
+  function toast(msg) {
+    const e = q('#toast');
+    if (!e) return;
+    e.textContent = msg;
+    e.classList.add('show');
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(() => e.classList.remove('show'), 2000);
+  }
+  
+  function renderGuide(guide) {
+    const sections = JSON.parse(guide.sections_json || '[]');
+    const title = lang === 'en' ? (guide.title_en || guide.title_ru) : guide.title_ru;
+    const desc = lang === 'en' ? (guide.description_en || guide.description_ru) : guide.description_ru;
+    
+    let sectionsHTML = sections.map((s, i) => `
+      <section id="guide-section-${i}">
+        <h3>${escapeHtml(s.heading || '')}</h3>
+        <p>${escapeHtml(s.body || '')}</p>
+      </section>
+    `).join('');
+    
+    let navButtons = sections.map((s, i) => 
+      `<button data-target="guide-section-${i}">${escapeHtml(s.heading || 'Section ' + (i+1))}</button>`
+    ).join('');
+    
+    q('#contentPanel').innerHTML = `
+      <article class="guide">
+        <header class="guideTop">
+          <div class="category">${escapeHtml(guide.category)}</div>
+          <h2>${escapeHtml(title)}</h2>
+          <p>${escapeHtml(desc || '')}</p>
+        </header>
+        <nav class="guideNav">
+          <button data-target="guide-section-0" class="quickButton">${t('start')}</button>
+          ${navButtons}
+          <button data-target="bonus-section" class="bonusNavButton">${t('bonus')}</button>
+        </nav>
+        ${sectionsHTML}
+        <div id="bonus-section" class="megaAd"></div>
+      </article>
+    `;
+    
+    q('#contentPanel').addEventListener('click', e => {
+      const b = e.target.closest('[data-target]');
+      if (!b) return;
+      const target = document.getElementById(b.dataset.target);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    
+    document.dispatchEvent(new CustomEvent('cs:guide-rendered'));
+    q('#contentPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  
+  async function unlock() {
+    const cipher = q('#cipherInput').value.trim();
+    if (!cipher) return;
+    
+    const btn = q('#unlockBtn');
+    btn.classList.add('loading');
+    btn.disabled = true;
+    
+    await new Promise(r => setTimeout(r, 280));
+    
+    const guideIds = Object.keys(guidesCache);
+    let found = false;
+    
+    for (const guideId of guideIds) {
+      const result = await verifyCipherViaAPI(guideId, cipher);
+      if (result && result.guide) {
+        unlocked = true;
+        currentGuide = result.guide;
+        renderGuide(currentGuide);
+        toast(t('access'));
+        trackPageView(currentGuide.id);
+        found = true;
+        break;
+      }
+    }
+    
+    if (!found) {
+      q('#contentPanel').innerHTML = `
+        <div class="locked" style="text-align:center;padding:40px">
+          <h3>${t('bad')}</h3>
+          <p>${t('retry')}</p>
+          <button class="btn" onclick="document.querySelector('#cipherInput').focus()">${t('retry')}</button>
+        </div>
+      `;
+      toast(t('bad'));
+    }
+    
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+  
+  function init() {
+    root.dataset.theme = localStorage.getItem('csTheme') || 'dark';
+    root.dataset.style = localStorage.getItem('csStyle') || 'neon';
+    
+    applyLanguage(lang, false);
+    syncTheme();
+    
+    q('#langBtn').onclick = () => applyLanguage(lang === 'ru' ? 'en' : 'ru');
+    q('#themeBtn').onclick = () => {
+      root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('csTheme', root.dataset.theme);
+      syncTheme();
+    };
+    q('#hintsBtn').onclick = () => q('#hintModal').hidden = false;
+    qa('[data-close]').forEach(e => e.onclick = () => q('#hintModal').hidden = true);
+    
+    q('#fillTest').onclick = () => {
+      q('#cipherInput').value = Object.values(guidesCache)[0]?.cipher_code || '';
+      q('#hintModal').hidden = true;
+      q('#cipherInput').focus();
+    };
+    
+    qa('.hintChip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const hint = chip.dataset.hint;
+        if (hint === 'format' || hint === 'help') q('#hintModal').hidden = false;
+        if (hint === 'test') q('#fillTest').click();
+      });
+    });
+    
+    q('#unlockBtn').addEventListener('click', unlock);
+    q('#cipherInput').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+    
+    document.querySelectorAll('.styleMenu button[data-style]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        root.dataset.style = btn.dataset.style;
+        localStorage.setItem('csStyle', btn.dataset.style);
+      });
+    });
+    
+    loadGuidesFromAPI().then(guides => {
+      q('#guideCount').textContent = String(guides.length).padStart(2, '0');
+    });
+    
+    trackPageView(null);
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  
+  window.CS_APP = {
+    setLanguage: applyLanguage,
+    getLanguage: () => lang,
+    renderGuide: () => unlocked && currentGuide && renderGuide(currentGuide),
+    getGuides: () => guidesCache
+  };
+})();
